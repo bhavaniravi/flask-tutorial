@@ -6,6 +6,8 @@ class Schema:
         self.conn = sqlite3.connect('todo.db')
         self.create_user_table()
         self.create_to_do_table()
+        # Why are we calling user table before to_do table
+        # what happens if we swap them?
 
     def __del__(self):
         # body of destructor
@@ -15,14 +17,15 @@ class Schema:
     def create_to_do_table(self):
 
         query = """
-        CREATE TABLE IF NOT EXISTS Todo (
+        CREATE TABLE IF NOT EXISTS "Todo" (
           id INTEGER PRIMARY KEY,
-          text TEXT,
+          Title TEXT,
+          Description TEXT,
           _is_done boolean,
           _is_deleted boolean,
-          CreatedOn Date DEFAULT GETDATE()
-          DueDate Date 
-          UserId INTEGER FOREIGN KEY REFERENCES User(_id)
+          CreatedOn Date DEFAULT CURRENT_DATE,
+          DueDate Date,
+          UserId INTEGER FOREIGNKEY REFERENCES User(_id)
         );
         """
 
@@ -30,11 +33,11 @@ class Schema:
 
     def create_user_table(self):
         query = """
-        CREATE TABLE IF NOT EXISTS User (
-          _id INTEGER PRIMARY KEY,
-          Name TEXT,
-          Email VARCHAR(320),
-          CreatedOn Date DEFAULT GETDATE()
+        CREATE TABLE IF NOT EXISTS "User" (
+        _id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        Name TEXT NOT NULL, 
+        Email TEXT, 
+        CreatedOn Date default CURRENT_DATE
         );
         """
         self.conn.execute(query)
@@ -45,19 +48,20 @@ class ToDoModel:
 
     def __init__(self):
         self.conn = sqlite3.connect('todo.db')
+        self.conn.row_factory = sqlite3.Row
 
     def __del__(self):
         # body of destructor
         self.conn.commit()
         self.conn.close()
 
-    def create(self, text, description, due_date, current_user):
-        query = f'insert into {TABLENAME} ' \
+    def create(self, params):
+        query = f'insert into {self.TABLENAME} ' \
                 f'(Title, Description, DueDate, UserId) ' \
-                f'values ({text},{description},{due_date},{current_user})'
-
+                f'values ("{params.get("Title")}","{params.get("Description")}",' \
+                f'"{params.get("DueDate")}","{params.get("UserId")}")'
         result = self.conn.execute(query)
-        return result
+        return result.fetchone()
 
     def delete(self, item_id):
         query = f"UPDATE {TABLENAME} " \
@@ -74,24 +78,29 @@ class ToDoModel:
         set_query = [f'{column} = {value}'
                      for column, value in update_dict.items()]
 
-        query = f"UPDATE {TABLENAME} " \
+        query = f"UPDATE {self.TABLENAME} " \
                 f"SET {set_query} " \
                 f"WHERE _id = {item_id}"
 
         self.conn.execute(query)
 
     def list(self, user_id):
-        query = f"SELECT (Title, Description, DueDate) " \
-                f"from {TABLENAME} " \
-                f"WHERE UserId = {user_id}"
-        return self.conn.execute(query)
+        where_clause = f"WHERE UserId = {user_id}" if user_id else ""
+        query = f"SELECT Title, Description, DueDate " \
+                f"from {self.TABLENAME} " \
+                f"{where_clause}"
+        result_set = self.conn.execute(query).fetchall()
+        result = [{column: row[i]
+                  for i, column in enumerate(result_set[0].keys())}
+                  for row in result_set]
+        return result
 
 
 class User:
     TABLENAME = "User"
 
     def create(self, name, email):
-        query = f'insert into {TABLENAME} ' \
+        query = f'insert into {self.TABLENAME} ' \
                 f'(Name, Email) ' \
                 f'values ({name},{email})'
         result = self.conn.execute(query)
