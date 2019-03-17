@@ -6,13 +6,15 @@ class ToDoService:
         self.model = ToDoModel()
 
     def create(self, params):
-        self.model.create(params["text"], params["Description"])
+
+        return self.model.create(params)
 
     def update(self, item_id, params):
-        self.model.update(item_id, params)
+        return self.model.update(item_id, params)
 
     def delete(self, item_id):
-        self.model.delete(item_id)
+        return self.model.delete(item_id)
 
-    def list(self):
-        self.model.list(user_id=user_id)
+    def list(self, user_id=None):
+        response = self.model.list(user_id=user_id)
+        return response
