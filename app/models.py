@@ -21,8 +21,8 @@ class Schema:
           id INTEGER PRIMARY KEY,
           Title TEXT,
           Description TEXT,
-          _is_done boolean,
-          _is_deleted boolean,
+          _is_done boolean DEFAULT 0,
+          _is_deleted boolean DEFAULT 0,
           CreatedOn Date DEFAULT CURRENT_DATE,
           DueDate Date,
           UserId INTEGER FOREIGNKEY REFERENCES User(_id)
@@ -55,40 +55,45 @@ class ToDoModel:
         self.conn.commit()
         self.conn.close()
 
+    def get_by_id(self, _id):
+        where_clause = f"AND id={_id}"
+        return self.list_items(where_clause)
+
     def create(self, params):
+        print (params)
         query = f'insert into {self.TABLENAME} ' \
                 f'(Title, Description, DueDate, UserId) ' \
-                f'values ("{params.get("Title")}","{params.get("Description")}",' \
+                f'values ("{params.get("text")}","{params.get("Description")}",' \
                 f'"{params.get("DueDate")}","{params.get("UserId")}")'
         result = self.conn.execute(query)
-        return result.fetchone()
+        return self.get_by_id(result.lastrowid)
 
     def delete(self, item_id):
-        query = f"UPDATE {TABLENAME} " \
-                f"SET _is_deleted = 1 " \
-                f"WHERE _id = {item_id}"
-
+        query = f"UPDATE {self.TABLENAME} " \
+                f"SET _is_deleted =  {1} " \
+                f"WHERE id = {item_id}"
+        print (query)
         self.conn.execute(query)
+        return self.list_items()
 
     def update(self, item_id, update_dict):
         """
         column: value
         Title: new title
         """
-        set_query = [f'{column} = {value}'
-                     for column, value in update_dict.items()]
+        set_query = " ".join([f'{column} = {value}'
+                     for column, value in update_dict.items()])
 
         query = f"UPDATE {self.TABLENAME} " \
                 f"SET {set_query} " \
-                f"WHERE _id = {item_id}"
-
+                f"WHERE id = {item_id}"
         self.conn.execute(query)
+        return self.get_by_id(item_id)
 
-    def list(self, user_id):
-        where_clause = f"WHERE UserId = {user_id}" if user_id else ""
-        query = f"SELECT Title, Description, DueDate " \
-                f"from {self.TABLENAME} " \
-                f"{where_clause}"
+    def list_items(self, where_clause=""):
+        query = f"SELECT id, Title, Description, DueDate, _is_done " \
+                f"from {self.TABLENAME} WHERE _is_deleted != {1} " + where_clause
+        print (query)
         result_set = self.conn.execute(query).fetchall()
         result = [{column: row[i]
                   for i, column in enumerate(result_set[0].keys())}
