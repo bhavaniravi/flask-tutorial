@@ -1,19 +1,18 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
-MAINTANER Your Name "bhava0895@gmail.com"
+MAINTAINER Bhavani "bhava0895@gmail.com"
 
-RUN apt-get update -y && \
-    apt-get install -y python-pip python-dev
+RUN apt-get update && apt-get install -y python3 python3-dev python3-pip nginx
 
 # We copy just the requirements.txt first to leverage Docker cache
 COPY ./requirements.txt /app/requirements.txt
 
 WORKDIR /app
 
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 COPY . /app
 
-ENTRYPOINT [ "python" ]
+ENTRYPOINT [ "python3" ]
 
-CMD [ "app.py" ]
+CMD [ "app/app.py" ]
