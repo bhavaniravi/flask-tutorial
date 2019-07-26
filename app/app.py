@@ -35,7 +35,7 @@ def create_todo():
     return jsonify(ToDoService().create(request.get_json()))
 
 
-@app.route("/todo/<item_id>", methods=["PU"])
+@app.route("/todo/<item_id>", methods=["PUT"])
 def update_item(item_id):
     return jsonify(ToDoService().update(item_id, request.get_json()))
 
