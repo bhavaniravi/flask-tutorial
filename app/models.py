@@ -63,7 +63,7 @@ class ToDoModel:
         print (params)
         query = f'insert into {self.TABLENAME} ' \
                 f'(Title, Description, DueDate, UserId) ' \
-                f'values ("{params.get("text")}","{params.get("Description")}",' \
+                f'values ("{params.get("Title")}","{params.get("Description")}",' \
                 f'"{params.get("DueDate")}","{params.get("UserId")}")'
         result = self.conn.execute(query)
         return self.get_by_id(result.lastrowid)
