@@ -34,9 +34,9 @@ class Schema:
     def create_user_table(self):
         query = """
         CREATE TABLE IF NOT EXISTS "User" (
-        _id INTEGER PRIMARY KEY AUTOINCREMENT, 
-        Name TEXT NOT NULL, 
-        Email TEXT, 
+        _id INTEGER PRIMARY KEY AUTOINCREMENT,
+        Name TEXT NOT NULL,
+        Email TEXT,
         CreatedOn Date default CURRENT_DATE
         );
         """
@@ -81,7 +81,7 @@ class ToDoModel:
         column: value
         Title: new title
         """
-        set_query = " ".join([f'{column} = {value}'
+        set_query = ", ".join([f'{column} = {value}'
                      for column, value in update_dict.items()])
 
         query = f"UPDATE {self.TABLENAME} " \
@@ -110,4 +110,3 @@ class User:
                 f'values ({name},{email})'
         result = self.conn.execute(query)
         return result
-
