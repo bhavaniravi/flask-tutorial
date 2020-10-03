@@ -1,6 +1,6 @@
 # ToDo Application
 
-[![DeepSource](https://static.deepsource.io/deepsource-badge-light.svg)](https://deepsource.io/gh/yashkim24/StackOverflow-assistant-bot/?ref=repository-badge)
+[![DeepSource](https://static.deepsource.io/deepsource-badge-light.svg)](https://deepsource.io/gh/bhavaniravi/flask-tutorial/?ref=repository-badge)
 
 [This is a code that comes along with great tutorial](https://medium.com/@bhavaniravi/build-your-1st-python-web-app-with-flask-b039d11f101c)
 
