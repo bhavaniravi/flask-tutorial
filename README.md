@@ -1,6 +1,7 @@
 # ToDo Application
 
 [![DeepSource](https://static.deepsource.io/deepsource-badge-light.svg)](https://deepsource.io/gh/bhavaniravi/flask-tutorial/?ref=repository-badge)
+[![DeepSource](https://deepsource.io/gh/bhavaniravi/flask-tutorial.svg/?label=active+issues&show_trend=true)](https://deepsource.io/gh/bhavaniravi/flask-tutorial/?ref=repository-badge)
 
 [This is a code that comes along with great tutorial](https://medium.com/@bhavaniravi/build-your-1st-python-web-app-with-flask-b039d11f101c)
 
