@@ -81,12 +81,13 @@ class ToDoModel:
         column: value
         Title: new title
         """
-        set_query = ", ".join([f'{column} = {value}'
+        set_query = ", ".join([f'{column} = "{value}"'
                      for column, value in update_dict.items()])
 
         query = f"UPDATE {self.TABLENAME} " \
                 f"SET {set_query} " \
                 f"WHERE id = {item_id}"
+    
         self.conn.execute(query)
         return self.get_by_id(item_id)
 

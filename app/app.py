@@ -39,6 +39,9 @@ def create_todo():
 def update_item(item_id):
     return jsonify(ToDoService().update(item_id, request.get_json()))
 
+@app.route("/todo/<item_id>", methods=["GET"])
+def get_item(item_id):
+    return jsonify(ToDoService().get_by_id(item_id))
 
 @app.route("/todo/<item_id>", methods=["DELETE"])
 def delete_item(item_id):

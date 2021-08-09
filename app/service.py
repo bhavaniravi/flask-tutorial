@@ -17,3 +17,8 @@ class ToDoService:
     def list(self):
         response = self.model.list_items()
         return response
+    
+    def get_by_id(self, item_id):
+        response = self.model.get_by_id(item_id)
+        return response
+
