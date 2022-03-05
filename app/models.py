@@ -65,6 +65,13 @@ class ToDoModel:
                 f'(Title, Description, DueDate, UserId) ' \
                 f'values ("{params.get("Title")}","{params.get("Description")}",' \
                 f'"{params.get("DueDate")}","{params.get("UserId")}")'
+
+        """insert into todo (Title, Description, DueDate, UserId) values ("todo1","todo1", "2018-01-01", 1)"""
+
+        todo = Todo(title=params.get("Title"), description=params.get("Description"), due_date=params.get("DueDate"), user_id=params.get("UserId"))
+        db.session.add(todo)
+        db.session.commit()
+        
         result = self.conn.execute(query)
         return self.get_by_id(result.lastrowid)
 
@@ -93,9 +100,11 @@ class ToDoModel:
 
     def list_items(self, where_clause=""):
         query = f"SELECT id, Title, Description, DueDate, _is_done " \
-                f"from {self.TABLENAME} WHERE _is_deleted != {1} " + where_clause
+                f"from {self.TABLENAME}" 
+                # WHERE _is_deleted != {1} " + where_clause
         print (query)
         result_set = self.conn.execute(query).fetchall()
+        print (result_set)
         result = [{column: row[i]
                   for i, column in enumerate(result_set[0].keys())}
                   for row in result_set]
