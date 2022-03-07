@@ -1,0 +1,58 @@
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todoapp
+  labels:
+    app: todoapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todoapp
+  template:
+    metadata:
+      labels:
+        app: todoapp
+    spec:
+      containers:
+        - name: todoapp
+          image: registry.digitalocean.com/bee-do-registry/flask-app:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todoapp
+spec:
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: 8000
+  selector:
+    app: todoapp
+  type: LoadBalancer
+# ---
+# ignore the following 
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: todoapp
+# spec:
+#   ports:
+#   - name: http
+#     port: 8000
+#     protocol: TCP
+#     targetPort: 8000
+# ---
+# apiVersion: getambassador.io/v2
+# kind: Mapping
+# metadata:
+#   name: todoapp
+# spec:
+#   prefix: /todoapp/
+#   service: "todoapp:8000"
