@@ -67,10 +67,6 @@ class ToDoModel:
                 f'"{params.get("DueDate")}","{params.get("UserId")}")'
 
         """insert into todo (Title, Description, DueDate, UserId) values ("todo1","todo1", "2018-01-01", 1)"""
-
-        todo = Todo(title=params.get("Title"), description=params.get("Description"), due_date=params.get("DueDate"), user_id=params.get("UserId"))
-        db.session.add(todo)
-        db.session.commit()
         
         result = self.conn.execute(query)
         return self.get_by_id(result.lastrowid)
