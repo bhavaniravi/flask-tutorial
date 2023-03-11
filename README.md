@@ -1,12 +1,14 @@
 # ToDo Application
 
-[This is a code that comes along with great tutorial](https://medium.com/@bhavaniravi/build-your-1st-python-web-app-with-flask-b039d11f101c)
+[This is a code that comes along with tutorial](https://medium.com/@bhavaniravi/build-your-1st-python-web-app-with-flask-b039d11f101c)
 
 ## Using the Frontend
 
 1. Open `index.html` file in a browser.
 2. Run `python app/app.py` in the terminal.
 3. That's it! You can add create edit delete items via UI
+
+> [PythonToProject Bootcamp](https://bhavaniravi.gumroad.com/l/LaFSj) students can stop here. Docker can be tried at your own time.
 
 ## Using React Frontned
 
